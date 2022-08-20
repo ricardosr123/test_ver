@@ -1,7 +1,23 @@
 import pandas as pd
 import re
 
+# Next regex look for this structure "(CO.REG". It considers several cases:
+# - With/without first parenthesis
+# - Spaces between parenthesis and CO, and between C0 . and . Reg
+regex1base = '^\(?\s?CO\s?.?\s?REG'
+# - Characters misspelled.
+variations = '[A-Z0-9\(\)\[\]\{\}]'
+regex1lst = [''.join([regex1base[0:i], variations, regex1base[i + 1:]]) for i in [7, 8, 17, 18, 19]]
+regex1lst.insert(0, '^\(CO.REG')  # "Perfect" pattern
+# - Some additional cases selected at random
+regex1lst.append('^\(CO')
+regex1lst.append('R.G.*:')
+regex1lst.append('C.+EG')
+regex1 = 'r\''+'|'.join(regex1lst)+'\''
+
+
 class TwyReceipt(object):
+
     def __init__(self, ocr_file):
         """
         :param ocr_file: receipt ocr file location
@@ -19,14 +35,9 @@ class TwyReceipt(object):
         while True:
             self.temp.append(self.receipt.iloc[i, 8])
             i += 1
-            # Next regex look for this structure (CO.REG: xxxx ). It considers several cases should
-            # the characters are not properly recognized. It would be useful to have more receipts
-            # to find different kinds of common errors.
-            if re.search(r'^\(CO.REG.+\)|^\(CO|R.G.*:|C.+EG', self.receipt.iloc[i, 8]) or i>5:
+            if re.search(regex1, self.receipt.iloc[i, 8]) or i > 5:
                 break
-
-        #print(re.search(r'C.+FG', self.receipt.iloc[2, 8]))
-        self.company=' '.join(self.temp)
+        self.company = ' '.join(self.temp)
         return self.company
 
 
