@@ -22,7 +22,14 @@ variations2 = '[A-Z0-9]'
 regex2lst = [''.join([regex2base[0:i], variations2, regex2base[i + 1:]]) for i in [2, 3, 4, 5, 6, 7, 8]]
 regex2lst.insert(0, '-INVOICE-')  # "Perfect" pattern
 regex2 = 'r\''+'|'.join(regex2lst)+'\''
-print(regex2)
+
+# Next regex look for the structure  "TOTAL ROUNDED"
+regex3base = 'TOTAL\s?\s?ROUNDED'
+regex3lst = [''.join([regex3base[0:i], variations2, regex3base[i + 1:]]) for i in [0, 1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17]]
+regex3lst.insert(0, 'TOTAL\sROUNDED')  # "Perfect" pattern
+regex3 = 'r\''+'|'.join(regex3lst)+'\''
+
+# regex4 = r'CHANGE'
 
 class TwyReceipt(object):
 
@@ -47,6 +54,7 @@ class TwyReceipt(object):
                 break
         self.company = ' '.join(complst)
         return self.company
+
     def get_address(self):
         addrlst = []
         i = 1
@@ -61,14 +69,27 @@ class TwyReceipt(object):
         self.address = ' '.join(addrlst)
         return self.address
 
+    def get_total(self):
+        i = self.receipt[self.receipt['text'].str.match(regex3)].index.values+1
+        self.tot_round = self.receipt.iloc[i, 8].str.split(expand=True).iloc[0, 1]
+        return self.tot_round
+
+    def get_date(self):
+        #metodo de chequeo:
+        #i = self.receipt[self.receipt['text'].str.match(regex4)].index.values+2
+        #self.date = self.receipt.iloc[i, 8].str.split(expand=True).iloc[0, 0]
+        self.date = self.receipt.loc[self.receipt['text'].str.match(r'[0-3][0-9]\s?-\s?[01][0-9]\s?-\s?[0-9][0-9]'),
+                                     'text'].item().split()[0]
+        return self.date
+
 def run():
     receipt_1 = TwyReceipt("./ocr_files/OCR1.txt")
     receipt_2 = TwyReceipt("./ocr_files/OCR2.txt")
     receipt_3 = TwyReceipt("./ocr_files/OCR1mod.txt")
 
-    print(receipt_1.get_address())
-    print(receipt_2.get_address())
-    print(receipt_3.get_address())
+    print(receipt_1.get_date())
+    print(receipt_2.get_date())
+    print(receipt_3.get_date())
 
 
 if __name__ == '__main__':
