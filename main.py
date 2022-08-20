@@ -82,14 +82,37 @@ class TwyReceipt(object):
                                      'text'].item().split()[0]
         return self.date
 
+    def get_items(self):
+        #Regex a item
+        self.n_line_items = int(self.receipt.loc[self.receipt['text'].str.match(r'ITEM\s?\(\s?S\s?\)'), 'text'].item().split()[-1])
+
+        i = 3
+        while re.search(regex2, self.receipt.iloc[i, 8]) is None and i < 15:
+            i += 1
+        i += 3
+        self.line_items = []
+        for j in range(self.n_line_items):
+            self.line_items.append(dict())
+            self.line_items[j]['sku'] = self.receipt.iloc[i, 8]
+            i += 1
+            self.line_items[j]['quantity'] = self.receipt.iloc[i, 8]
+            i += 2
+            self.line_items[j]['price'] = self.receipt.iloc[i, 8]
+            i += 1
+            self.line_items[j]['total'] = self.receipt.iloc[i, 8]
+            i += 3
+            #get item
+        print(self.line_items)
+        return self.n_line_items
+
 def run():
     receipt_1 = TwyReceipt("./ocr_files/OCR1.txt")
     receipt_2 = TwyReceipt("./ocr_files/OCR2.txt")
     receipt_3 = TwyReceipt("./ocr_files/OCR1mod.txt")
 
-    print(receipt_1.get_date())
-    print(receipt_2.get_date())
-    print(receipt_3.get_date())
+    receipt_1.get_items()
+    receipt_2.get_items()
+    receipt_3.get_items()
 
 
 if __name__ == '__main__':
