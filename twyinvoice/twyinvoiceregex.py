@@ -1,3 +1,5 @@
+# File with the regular expressions used by TwyInvoice class
+
 # Next regex look for the structure "(CO.REG". It considers the following cases:
 # - With/without first parenthesis
 # - Spaces between parenthesis and CO, and between C0 . and . Reg
