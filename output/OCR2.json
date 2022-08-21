@@ -1,0 +1,38 @@
+{
+    "company": "MR D.I.Y. (M) SDN BHD",
+    "date": "18-11-18",
+    "address": "LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR (TESCO PUTRA NILAI)",
+    "line_items": [
+        {
+            "sku": "9555916500133",
+            "quantity": "1",
+            "price": "3.11",
+            "total": "3.11"
+        },
+        {
+            "sku": "9555916500126",
+            "quantity": "1",
+            "price": "4.62",
+            "total": "4.62"
+        },
+        {
+            "sku": "079567600084",
+            "quantity": "1",
+            "price": "11.23",
+            "total": "11.23"
+        },
+        {
+            "sku": "9555651400385",
+            "quantity": "1",
+            "price": "7.45",
+            "total": "7.45"
+        },
+        {
+            "sku": "9090822",
+            "quantity": "1",
+            "price": "4.50",
+            "total": "4.50"
+        }
+    ],
+    "total": "30.90"
+}
