@@ -54,7 +54,7 @@ class TwyInvoice(object):
                                      'text'].item().split()[0]
 
     def extract_items(self):
-        #Regex a item
+        # get number of items
         self.n_line_items = int(self.receipt.loc[self.receipt['text'].str.match(twyinvoiceregex.rgx_item), 'text'].item().split()[-1])
 
         i = 3
